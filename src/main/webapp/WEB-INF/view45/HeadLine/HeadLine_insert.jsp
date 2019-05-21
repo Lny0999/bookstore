@@ -28,7 +28,7 @@
 </head>
 <body>
 <article class="page-container">
-	<form action="HeadLine_insertDeal" method="post" class="form form-horizontal" id="form-bean-edit">
+	<form action="HeadLine_insertDeal" method="post" class="form form-horizontal" id="form-bean-edit" enctype="multipart/form-data">
 	<!-- <input type="hidden" name="oper" value="insertDeal" /> -->
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>头条标题：</label>
@@ -43,10 +43,19 @@
 		</div>
 	</div>
 	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">上传图片：</label>
+			<label id="addFileName"></label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="btn-upload form-group">
+				<a href="javascript:void();" class="btn btn-primary radius upload-btn"><i class="Hui-iconfont">&#xe642;</i> 浏览文件</a>
+				<input type="file" name="headImg" class="input-file" id="input-file">
+				</span> </div>
+	</div>
+	<!--  
+	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>头条图片：</label>
 		<div class="formControls col-xs-8 col-sm-9">
 			<input type="text" class="input-text" autocomplete="off" value="${lineImg }" placeholder="" id="lineImg" name="lineImg">
-		</div>
+		</div>-->
 	</div>
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3"></label>

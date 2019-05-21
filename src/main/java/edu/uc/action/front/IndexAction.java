@@ -24,5 +24,9 @@ public class IndexAction extends BaseAction {
 	{
 		return "register";
 	}
+	public String search()
+	{
+		return "search";
+	}
 	
 }

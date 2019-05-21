@@ -75,4 +75,10 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
 		return bookDao.pagerByName(name, pageNum, pageSize);
 	}
 
+	@Override
+	public List<Book> getBookByCategoryId(Long categoryId) {
+		// TODO Auto-generated method stub
+		return bookDao.getBookByCategoryId(categoryId);
+	}
+
 }

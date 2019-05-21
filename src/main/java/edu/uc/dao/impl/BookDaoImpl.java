@@ -198,5 +198,26 @@ public class BookDaoImpl extends BaseDaoImpl<Book> implements BookDao {
 		return BookList;
 	}
 
+	@Override
+	public List<Book> getBookByCategoryId(Long categoryId) {
+		List<Book> BookList = new ArrayList<Book>();
+		String hql = "from Book where bookCategory.categoryId=?0";
+		hql += " order by bookId desc";
+		List<Object> arrParams = new ArrayList<Object>();
+		arrParams.add(categoryId);
+		Object[] params = arrParams.toArray();
+		try {
+
+			BookList = getTmpl().execute(this.getCallbackList(Book.class, hql, params));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			throw new RuntimeException();
+
+		} finally {
+
+		}
+		return BookList;
+	}
+
 
 }

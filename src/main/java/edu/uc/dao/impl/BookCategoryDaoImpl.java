@@ -17,7 +17,6 @@ public class BookCategoryDaoImpl extends BaseDaoImpl<BookCategory> implements Bo
 		// TODO Auto-generated method stub
 		List<BookCategory> BookCategoryList = new ArrayList<BookCategory>();
 		String hql = "from BookCategory";
-		hql += " order by categoryId desc";
 		List<Object> arrParams = new ArrayList<Object>();
 		Object[] params = arrParams.toArray();
 		try {

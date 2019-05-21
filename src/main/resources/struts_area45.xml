@@ -27,11 +27,19 @@
 	  <interceptors>
              <interceptor name="loginInteceptor" class="edu.uc.interceptor.LoginInterceptor">
              </interceptor>
+              <interceptor name="frontLoginInterceptor" class="edu.uc.interceptor.FrontLoginInterceptor">
+             </interceptor>
                <interceptor-stack name="myStack">
                 <!-- 必须引用struts-default.xml中的拦截器栈 -->
                 <interceptor-ref name="defaultStack"></interceptor-ref>
                 <!-- 自己的拦截器 -->
                 <interceptor-ref name="loginInteceptor"></interceptor-ref>
+            </interceptor-stack>
+             <interceptor-stack name="myStack1">
+                <!-- 必须引用struts-default.xml中的拦截器栈 -->
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <!-- 自己的拦截器 -->
+                <interceptor-ref name="frontLoginInterceptor"></interceptor-ref>
             </interceptor-stack>
      </interceptors>
       <!-- 配置全局拦截器为 -->
@@ -47,13 +55,14 @@
 			<result name="go_preload">/WEB-INF/pubview/go_preload.jsp</result>
 			<result name="go_reload">/WEB-INF/pubview/go_reload.jsp</result>
 			<result name="login" type="redirectAction">Login_view</result>
+			<result name="index" type="redirectAction">Index_view</result>
 		</global-results>
 		<action name="Json_*" class="JsonAction" method="{1}">
 				<result name="success" type="stream">
 						<param name="contextType">text/html;charset=UTF-8</param>
 						<param name="inputName">rspStream</param>
 				</result>
-				<allowed-methods>getCategoryNameList,updateEnableStatus,updateUserPassword</allowed-methods>
+				<allowed-methods>getCategoryNameList,updateEnableStatus,updateUserPassword,getHeadLineImg,getBookCategory,getBookList,getCategoryNameListToBook,getBookListByCategoryId</allowed-methods>
 		</action>
 		<action name="ValidateCode" class="ValidateCodeAction" method="execute">
 			<result type="stream">
@@ -80,13 +89,15 @@
 			<result name="view">/WEB-INF/view45/Front/home.jsp</result>
 			<result name="login">/WEB-INF/view45/Front/login.jsp</result>
 			<result name="register">/WEB-INF/view45/Front/register.jsp</result>
-			<allowed-methods>view,login,register</allowed-methods>
+			<result name="search">/WEB-INF/view45/Front/searchI.jsp</result>
+			<allowed-methods>view,login,register,search</allowed-methods>
 		</action>
 		<action name="Personal_*" class="PersonalAction" method="{1}">
 			<result name="personal">/WEB-INF/view45/Front/Person/index.jsp</result>
 			<result name="address">/WEB-INF/view45/Front/Person/address.jsp</result>
 			<result name="information">/WEB-INF/view45/Front/Person/information.jsp</result>
 			<result name="password">/WEB-INF/view45/Front/Person/password.jsp</result>
+			<interceptor-ref name="myStack1"></interceptor-ref>
 			<allowed-methods>personal,address,updateAddress,information,informationUpdate,password,passwordUpdate</allowed-methods>
 		</action>
 		<action name="FrontLogin_*" class="FrontLoginAction" method="{1}">

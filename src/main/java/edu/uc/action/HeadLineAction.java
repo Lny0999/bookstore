@@ -1,8 +1,13 @@
 package edu.uc.action;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -28,8 +33,36 @@ public class HeadLineAction extends CrudAction{
 	private String id;
 	private String lineName;
 	private String lineLink;
-	private String lineImg;
+	//private String lineImg;
+	private File headImg;
+	private String headImgContentType;
+	private String headImgFileName;
+	
 		
+
+	public File getHeadImg() {
+		return headImg;
+	}
+
+	public void setHeadImg(File headImg) {
+		this.headImg = headImg;
+	}
+
+	public String getHeadImgContentType() {
+		return headImgContentType;
+	}
+
+	public void setHeadImgContentType(String headImgContentType) {
+		this.headImgContentType = headImgContentType;
+	}
+
+	public String getHeadImgFileName() {
+		return headImgFileName;
+	}
+
+	public void setHeadImgFileName(String headImgFileName) {
+		this.headImgFileName = headImgFileName;
+	}
 
 	public String getId() {
 		return id;
@@ -56,13 +89,7 @@ public class HeadLineAction extends CrudAction{
 	}
 	
 	
-	public String getLineImg() {
-		return lineImg;
-	}
-
-	public void setLineImg(String lineImg) {
-		this.lineImg = lineImg;
-	}
+	
 
 
 	@Override
@@ -127,8 +154,7 @@ public class HeadLineAction extends CrudAction{
 		// TODO Auto-generated method stub
 		request.put("lineName", lineName);
 		request.put("lineLink", lineLink);
-		request.put("lineImg", lineImg);
-		
+		request.put("headImg",headImg);
 		String vMSg="";
 		if(SysFun.isNullOrEmpty(lineName)) {
 			vMSg+="头条名不能为空";
@@ -136,7 +162,7 @@ public class HeadLineAction extends CrudAction{
 		if(SysFun.isNullOrEmpty(lineLink)) {
 			vMSg+="头条链接不能为空";
 		}
-		if(SysFun.isNullOrEmpty(lineImg)) {
+		if(headImg==null) {
 			vMSg+="头条图片不能为空";
 		}
 		if(!SysFun.isNullOrEmpty(vMSg)) {
@@ -144,11 +170,23 @@ public class HeadLineAction extends CrudAction{
 			System.out.println(vMSg);
 			return "insert";
 		}
-		
+		//1、保存头像文件到服务器中
+        String filePath = ServletActionContext.getServletContext().getRealPath("/upload/head/");
+        String fileName = UUID.randomUUID().toString().replaceAll("-", "") + headImgFileName.substring(headImgFileName.lastIndexOf("."));
+        try {
+       	 FileUtils.copyFile(headImg, new File(filePath, fileName));
+			//System.out.println("filePath"+filePath+"\\"+fileName);
+		} catch (IOException e) {
+				// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //System.out.println(fileName+"fileName");
+        String headPicPath = "/upload/head/"+fileName;
+        //System.out.println(headPicPath+"headPicPath");
 		HeadLine bean=new HeadLine();
 		bean.setLineName(lineName);
 		bean.setLineLink(lineLink);
-		bean.setLineImg(lineImg);
+		bean.setLineImg(headPicPath);
 		Long result=0L;
 		try {
 			result=headLineService.insert(bean);
@@ -169,7 +207,7 @@ public class HeadLineAction extends CrudAction{
 	@Override
 	public String delete() {
 		// TODO Auto-generated method stub
-		return null;
+		return "delete";
 	}
 
 	@Override
@@ -177,6 +215,9 @@ public class HeadLineAction extends CrudAction{
 		// TODO Auto-generated method stub
 		if(!SysFun.isNullOrEmpty(id)) {
 			Long iId=SysFun.parseLong(id);
+			HeadLine headLine = headLineService.load(iId);
+			String filePath = ServletActionContext.getServletContext().getRealPath("/");
+			new File(filePath+headLine.getLineImg()).delete();
 			Long result=headLineService.delete(iId);
 			if(result>0) {
 				return "go_ok";
@@ -204,7 +245,7 @@ public class HeadLineAction extends CrudAction{
 				request.put("Id", bean.getId());
 				request.put("lineName", bean.getLineName());
 				request.put("lineLink", bean.getLineLink());
-				request.put("lineImg", bean.getLineImg());
+				//request.put("lineImg", bean.getLineImg());
 				return "update";
 				
 			}
@@ -219,7 +260,7 @@ public class HeadLineAction extends CrudAction{
 		// TODO Auto-generated method stub
 		request.put("lineName", lineName);
 		request.put("lineLink", lineLink);
-		request.put("lineImg", lineImg);
+		//request.put("headImg", headImg);
 		
 		String vMsg="";
 		if(SysFun.isNullOrEmpty(lineName)) {
@@ -228,9 +269,7 @@ public class HeadLineAction extends CrudAction{
 		if(SysFun.isNullOrEmpty(lineLink)) {
 			vMsg+="头条链接不能为空";
 		}
-		if(SysFun.isNullOrEmpty(lineImg)) {
-			vMsg+="头条图片不能为空";
-		}
+		
 		if(!SysFun.isNullOrEmpty(vMsg)) {
 			request.put("msg", vMsg);
 			return "update";
@@ -249,7 +288,7 @@ public class HeadLineAction extends CrudAction{
 		
 		bean.setLineName(lineName);
 		bean.setLineLink(lineLink);
-		bean.setLineImg(lineImg);
+		//bean.setLineImg(headImg.getAbsolutePath());
 		
 		Long result=0L;
 		try {

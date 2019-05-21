@@ -46,6 +46,7 @@ public class BookAction extends CrudAction {
 	
 
 	public String getDiscountRate() {
+		
 		return discountRate;
 	}
 

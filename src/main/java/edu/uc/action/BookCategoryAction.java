@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 import com.liuvei.common.PagerItem;
 import com.liuvei.common.SysFun;
 
+import edu.uc.bean.Book;
 import edu.uc.bean.BookCategory;
 import edu.uc.dto.BookCategoryHandle;
 import edu.uc.service.BookCategoryService;
+import edu.uc.service.BookService;
 
 @Component("BookCategoryAction")
 @Scope("prototype")
@@ -20,6 +22,8 @@ public class BookCategoryAction extends CrudAction {
 
 	@Autowired
 	private BookCategoryService bookCategoryService;
+	@Autowired
+	private BookService bookService;
 	
 	private String categoryName;
 	private List<BookCategoryHandle> vHDataList = new ArrayList<BookCategoryHandle>();
@@ -206,6 +210,14 @@ public class BookCategoryAction extends CrudAction {
 		if(!SysFun.isNullOrEmpty(id))
 		{
 			Long vId = SysFun.parseLong(id);
+			//todo 置空图书类别
+			List<Book> BookList = bookService.getBookByCategoryId(vId);
+			for(Book Book:BookList)
+			{
+				Book.setBookCategory(null);
+				bookService.update(Book);
+				//System.out.println(Book.getBookId());
+			}
 			List<BookCategory> parentIdList = bookCategoryService.getParentIdList(vId);
 			if(parentIdList!=null)
 			{

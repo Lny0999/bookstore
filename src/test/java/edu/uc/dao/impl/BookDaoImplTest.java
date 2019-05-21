@@ -72,7 +72,7 @@ public class BookDaoImplTest extends BaseTest {
 	}
 
 	@Test
-	//@Ignore
+	@Ignore
 	public void testLoad() {
 		System.out.println("======load======");
 		Book book = bookDao.load(1L);
@@ -137,5 +137,15 @@ public class BookDaoImplTest extends BaseTest {
 			System.out.println(Book.getBookId());
 		}
 	}
-
+	@Test
+	public void testGetBookByCategoryId()
+	{
+		List<Book> BookList = bookDao.getBookByCategoryId(13l);
+		for(Book Book:BookList)
+		{
+			Book.setBookCategory(null);
+			bookDao.update(Book);
+			//System.out.println(Book.getBookId());
+		}
+	}
 }

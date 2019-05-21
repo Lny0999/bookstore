@@ -153,7 +153,7 @@ $(function(){
 		var selectCategoryName='';
 		var categoryName="${bean.bookCategory.categoryName}";
 		$.ajax({
- 			url:"Json_getCategoryNameList",
+ 			url:"Json_getCategoryNameListToBook",
  			type: "POST",//发送的类型
  			dataType:"json",//返回的是json
  			success: function (data) {
